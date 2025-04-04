@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  backend:
+    # Imagen de Django (construida desde ./backend)
+    build:
+      context: ./backend
+    container_name: django-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+
+  frontend:
+    # Imagen de Vite + React (construida desde ./frontend)
+    build:
+      context: ./frontend
+    container_name: vite-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev
+
+# Notas:
+# - Requiere Docker y Docker Compose instalados
+# - Se activa con: docker-compose up --build
+# - Asegúrate de crear un Dockerfile en cada subcarpeta si decides usarlo después
