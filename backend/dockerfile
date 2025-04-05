@@ -1,0 +1,21 @@
+# Dockerfile para Django
+FROM python:3.11-slim
+
+# Variables de entorno básicas
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Crear carpeta de trabajo
+WORKDIR /app
+
+# Instalar dependencias
+COPY requirements.txt /app/
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+# Copiar el proyecto
+COPY . /app/
+
+# Puerto para el servidor de desarrollo
+EXPOSE 8000
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
